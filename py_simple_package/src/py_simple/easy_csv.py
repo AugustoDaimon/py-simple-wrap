@@ -331,7 +331,7 @@ def sort_csv_by_column(
             ```python
             import csv
 
-            with open("people.csv", "r",, newline="", encoding="utf-8") as f:
+            with open("people.csv", "r", newline="", encoding="utf-8") as f:
                 data = list(csv.DictReader(f))
 
             def parse_val(val):
