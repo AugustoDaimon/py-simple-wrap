@@ -308,12 +308,12 @@ def sort_csv_by_column(
 ) -> None:
     """
     Sort a CSV file based on a specific column.
-
+    
     Args:
         filepath (str): Path to the CSV file.
-        column (str): Column name to sort by.
+        column (str): Column name to sort by. For mixed data, values are sorted numerically first, followed by non-numeric strings and empty cells.
         reverse (bool): If true, sorts in descending order. Default is false.
-        output_filepath (str | None): Path to the sorted CSV file. If None, overwrites original file.
+        output_filepath (str | None): Path to the sorted CSV file. If None, overwrites the source file.
         delimiter (str): Field delimiter (default is comma).
 
     Raises:
@@ -335,8 +335,11 @@ def sort_csv_by_column(
                 data = list(csv.DictReader(f))
 
             def parse_val(val):
-                try: return float(val)
-                except ValueError: return val
+                val = val or ""
+                try: 
+                    return (0, float(val), "")
+                except ValueError: 
+                    return (1, 0.0, val)
 
             sorted_data = sorted(data, key=lambda row: parse_val(row["Age"]), reverse=True)
 
@@ -355,11 +358,11 @@ def sort_csv_by_column(
         raise ValueError(f"Column not found: {column}")
 
     def sort_key(row: dict[str, Any]) -> Any:
-        val = row.get(column, "")
+        val = row.get(column, "") or ""
         try:
-            return float(val)
+            return (0, float(val), "")
         except ValueError:
-            return val
+            return (1, 0.0, val)
 
     sorted_data = sorted(data, key=sort_key, reverse=reverse)
     

@@ -284,3 +284,14 @@ class TestSortCsvByColumn:
         assert result[0]["Name"] == "Alice"
         assert result[1]["Name"] == "Bob"
         assert result[2]["Name"] == "Carol"
+
+    def test_sort_mixed_column_types(self, tmp_path):
+        csv_file = tmp_path / "mixed.csv"
+        csv_file.write_text("Name,Age\n""Alice,thirty\n""Bob,25\n""Carol,2.5\n""Dan,\n""Eve,eleven\n", encoding="utf-8",)
+
+        sort_csv_by_column(str(csv_file), column="Age")
+        
+        result = read_csv_to_list(str(csv_file), return_dict=True)
+
+        assert [row["Age"] for row in result] == ["2.5", "25", "", "eleven", "thirty"]
+        
