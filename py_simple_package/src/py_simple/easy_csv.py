@@ -312,7 +312,7 @@ def sort_csv_by_column(
     Args:
         filepath (str): Path to the CSV file.
         column (str): Column name to sort by. For mixed data, values are sorted numerically first, followed by non-numeric strings and empty cells.
-        reverse (bool): If true, sorts in descending order. Default is false.
+        reverse (bool): If true, sorts in descending order. Default is false. Note that for mixed data, this reverses the grouping, placing non-numeric strings and empty cells before numbers.
         output_filepath (str | None): Path to the sorted CSV file. If None, overwrites the source file.
         delimiter (str): Field delimiter (default is comma).
 
