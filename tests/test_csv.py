@@ -270,7 +270,7 @@ class TestSortCsvByColumn:
         empty_file = tmp_path / "empty.csv"
         empty_file.write_text("", encoding="utf-8")
 
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match=f"File is empty: "):
             sort_csv_by_column(str(empty_file), column="Age")
 
     def test_sort_by_string_column(self, tmp_path):
@@ -305,3 +305,9 @@ class TestSortCsvByColumn:
 
         assert [row["Age"] for row in result] == ["thirty", "eleven", "", "25", "2.5"]
 
+    def test_sort_header_only_raises_value_error(self, tmp_path):
+        csv_file = tmp_path / "header_only.csv"
+        csv_file.write_text("Name,Age\n", encoding="utf-8")
+
+        with pytest.raises(ValueError, match="No data rows to sort in file"):
+            sort_csv_by_column(str(csv_file), column="Age")

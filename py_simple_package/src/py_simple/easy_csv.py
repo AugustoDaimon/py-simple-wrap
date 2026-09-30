@@ -317,7 +317,7 @@ def sort_csv_by_column(
         delimiter (str): Field delimiter (default is comma).
 
     Raises:
-        ValueError: If the file is empty or the column is not found.
+        ValueError: If the file is empty, contains no data rows, or the column is not found.
 
     Example:
         === "The Py_simple Way"
@@ -352,7 +352,7 @@ def sort_csv_by_column(
     data = read_csv_to_list(filepath, return_dict=True, delimiter=delimiter)
 
     if not data:
-        raise ValueError(f"File is empty: {filepath}")
+        raise ValueError(f"No data rows to sort in file: {filepath}")
 
     if column not in data[0]:
         raise ValueError(f"Column not found: {column}")
